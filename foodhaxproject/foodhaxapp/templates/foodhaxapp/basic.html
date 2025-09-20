@@ -1,9 +1,151 @@
 <!DOCTYPE html>
 <html>
-<body>
+  <head>
+    <title>Google Map Example</title>
+    <style>
+      /* Make the map full screen */
+      #map {
+        height: 100vh;
+        width: 100%;
+      }
+      body, html {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
 
-<h1>Hello World!</h1>
-<p>Welcome to steel hacks</p>
+    <!-- Google Maps API -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8exeXURFSGfv1X6HK9Pu0d_dRCyZ1quE&callback=initMap"
+      async
+      defer
+    ></script>
 
-</body>
+    <script>
+      let map; // Global map variable
+
+      function initMap() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+      }
+
+      function showPosition(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const location = { lat: lat, lng: lng };
+
+        // Create map centered on current location
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 17,  // Adjusted zoom to show both markers
+          center: location,
+        });
+
+        // Marker at current location
+        new google.maps.Marker({
+          position: location,
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        });
+
+        // Fixed marker at -80, 100
+        new google.maps.Marker({
+          position: { lat: 40.444815846868735, lng: -79.957267501227 },
+          map: map,
+          title: "Green Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+       new google.maps.Marker({
+          position: { lat: 40.445166997444545, lng:-79.977530842473},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        new google.maps.Marker({
+          position: { lat: 40.434532095039, lng: -79.95270791132205 },
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+     new google.maps.Marker({
+          position: { lat: 40.43956379804762, lng: -79.96374836101927},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+      
+        new google.maps.Marker({
+          position: { lat: 40.433437189556074, lng: -79.96130754554716},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+      new google.maps.Marker({
+          position: { lat: 40.42866017767649, lng: -79.95242427518},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+        new google.maps.Marker({
+          position: { lat: 40.44875195595659, lng: -79.95582270227996},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+      
+      
+      new google.maps.Marker({
+          position: { lat: 40.45130223377264, lng: -79.95203119261022},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+        new google.maps.Marker({
+          position: { lat: 40.44914570433488, lng: -79.96950665614109},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+        new google.maps.Marker({
+          position: { lat: 40.42588245312482, lng: -79.94291020400222},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+        new google.maps.Marker({
+          position: { lat: 40.45072936202302, lng: -79.9691844440019},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        
+        new google.maps.Marker({
+          position: { lat: 40.43846720439091, lng: -79.97734413855592},
+          map: map,
+          title: "Blue Marker",
+   icon: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+        });
+        
+        
+        
+      }
+      function showError(error) {
+        alert("Error: " + error.message);
+      }
+    </script>
+  </body>
 </html>
+
