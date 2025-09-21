@@ -1,0 +1,6 @@
+settings.py
+
+venv/
+
+#due to sensitive API keys in all html files, they must be obscured
+*.html
