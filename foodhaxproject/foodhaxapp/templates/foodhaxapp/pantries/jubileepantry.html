@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jubilee Association, Inc. Food Pantry: Polish Hill</title>
+  <style>
+    #map { height: 45vh; width: 50%; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #buttons { position: absolute; top: 60px; left: 10px; z-index: 5; background: #fff; padding: 5px; border-radius: 4px; }
+  </style>
+  <link rel="stylesheet" href="../../../static/jubileepantry.css">
+  <link rel="icon" href="../../../static/img/CartIcon.png" type="image/png">
+</head>
+<body>
+
+  <!-- BACK BUTTON -->
+  <div class="back-home">
+    <button onclick="window.location.href='../basic.html'">←</button>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+  <div class="header-left">
+    <a href="https://jubileekitchen.org/">Jubilee Association, Inc. Soup Kitchen</a>
+    <p class="tagline">Assisting those challenged by poverty, joblessness, or homelessness</p>
+  </div>
+  <img src="https://jubileekitchen.org/wp-content/uploads/sites/5/2023/03/Asset-1-1.png" alt="Jubilee Kitchen Logo" class="logo">
+</header>
+
+  <!-- MAIN -->
+  <main class="container main">
+    <!-- LEFT: Info -->
+    <section class="panel info-panel">
+      <h2>Location</h2>
+      <p class="address">3103 Brereton Street, Pittsburgh, PA 15219</p>
+
+      <h3>Important Notices</h3>
+      <ul class="notice-list">
+        <li><strong>Polish Hill Food Bank ONLY</strong></li>
+      </ul>
+
+      <h3>Hours</h3>
+      <ul class="hours-list">
+        <h4>Wednesday and Friday:</h4>
+        <li>09:00 - 13:00</li>
+      </ul>
+    </section>
+
+    <section class="panel map-panel" aria-label="Map">
+  <h2>Map / Directions</h2>
+  <div class="buttons">
+      <button onclick="calculateRoute('DRIVING')">Driving</button>
+      <button onclick="calculateRoute('WALKING')">Walking</button>
+  </div>
+  <div id="map"></div>
+  
+  
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8exeXURFSGfv1X6HK9Pu0d_dRCyZ1quE&callback=initMap"
+        async defer></script>
+
+<script>
+let map, origin, destination, destinationMarker;
+let directionsService, directionsRenderer;
+let infoWindow;
+
+function initMap() {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported by this browser.");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(showPosition, showError);
+}
+
+function showPosition(position) {
+  origin = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude
+  };
+
+  destination = { lat: 40.4568462716883, lng: -79.96713332570312 };
+
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: origin,
+    zoom: 20
+  });
+
+  new google.maps.Marker({
+    position: origin,
+    map: map,
+    title: "Your Location",
+    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+  });
+
+  destinationMarker = new google.maps.Marker({
+    position: destination,
+    map: map,
+    title: "Destination",
+    icon: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+  });
+
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+    suppressMarkers: true
+  });
+
+  // Initialize info window
+  infoWindow = new google.maps.InfoWindow();
+
+  // Calculate initial route by DRIVING
+  calculateRoute('DRIVING');
+}
+
+function calculateRoute(modeStr) {
+  const mode = google.maps.TravelMode[modeStr]; // convert string to TravelMode
+
+  const request = {
+    origin: origin,
+    destination: destination,
+    travelMode: mode
+  };
+
+  directionsService.route(request, (result, status) => {
+    if (status === "OK" && result.routes.length > 0 && result.routes[0].legs.length > 0) {
+      directionsRenderer.setDirections(result);
+
+      const leg = result.routes[0].legs[0];
+      const distanceText = leg.distance.text;
+      const durationText = leg.duration.text;
+
+      // Update info window content
+      infoWindow.setContent(
+        `<span style="color:black;"><br> Jubilee's Food Pantry <br> Mode: ${modeStr}<br> Distance: ${distanceText}<br>Time: ${durationText}</span>`
+      );
+      destinationMarker.addListener("click", () => {
+        infoWindow.open(map, destinationMarker);
+      });
+     }
+  });
+}
+function showError(error) {
+  console.error("Geolocation error:", error);
+  alert("Geolocation error: " + error.message);
+}
+</script>
+</section>
+
+    <!-- RIGHT: Offerings & Notes -->
+    <aside class="panel stock-panel">
+      <h2>Offerings</h2>
+      <ul class="stock-list">
+        <li><strong>Food Pantry:</strong> Shelf-Stable</li>
+      </ul>
+      <h3>Notes</h3>
+      <p>For home deliveries, please speak to Pam.</p>
+    </aside>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; 2025 Food Hax — Jubilee Association, Inc. Food Bank: Polish Hill info</p>
+  </footer>
+
+</body>
+</html>

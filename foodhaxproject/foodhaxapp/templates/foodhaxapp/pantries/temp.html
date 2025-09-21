@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+    <!-- GREATER URBAN LEAGUE -->
+<head>
+  
+</head>
+<body>
+<div id="map"></div>
+<div id="buttons">
+  <button onclick="calculateRoute('DRIVING')">Driving</button>
+  <button onclick="calculateRoute('WALKING')">Walking</button>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8exeXURFSGfv1X6HK9Pu0d_dRCyZ1quE&callback=initMap"
+        async defer></script>
+
+<script>
+let map, origin, destination, destinationMarker;
+let directionsService, directionsRenderer;
+let infoWindow;
+
+function initMap() {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported by this browser.");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(showPosition, showError);
+}
+
+function showPosition(position) {
+  origin = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude
+  };
+
+  destination = { lat: 40.44009795254035, lng: -79.99952642963532};
+
+  map = new google.maps.Map(document.getElementsByClassName("map"), {
+    center: origin,
+    zoom: 20
+  });
+
+  new google.maps.Marker({
+    position: origin,
+    map: map,
+    title: "Your Location",
+    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+  });
+
+  destinationMarker = new google.maps.Marker({
+    position: destination,
+    map: map,
+    title: "Destination",
+    icon: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+  });
+
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+    suppressMarkers: true
+  });
+
+  // Initialize info window
+  infoWindow = new google.maps.InfoWindow();
+
+  // Calculate initial route by DRIVING
+  calculateRoute('DRIVING');
+}
+
+function calculateRoute(modeStr) {
+  const mode = google.maps.TravelMode[modeStr]; // convert string to TravelMode
+
+  const request = {
+    origin: origin,
+    destination: destination,
+    travelMode: mode
+  };
+
+  directionsService.route(request, (result, status) => {
+    if (status === "OK" && result.routes.length > 0 && result.routes[0].legs.length > 0) {
+      directionsRenderer.setDirections(result);
+
+      const leg = result.routes[0].legs[0];
+      const distanceText = leg.distance.text;
+      const durationText = leg.duration.text;
+
+      // Update info window content
+      infoWindow.setContent(
+        `<span style="color:black;"><br> Urban League of 
+<br> Greater Pittsburgh Hunger Services <br> Mode: ${modeStr}<br> Distance: ${distanceText}<br>Time: ${durationText}</span>`
+      );
+      destinationMarker.addListener("click", () => {
+        infoWindow.open(map, destinationMarker);
+      });
+     }
+  });
+}
+function showError(error) {
+  console.error("Geolocation error:", error);
+  alert("Geolocation error: " + error.message);
+}
+</script>
+</body>
+</html>
